@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>心聲音自我探索｜情緒覺察與資源索引</title>
+  <meta name="description" content="在這個平台，你可以覺察自己的心情溫度、反思自我照顧策略，並掌握台灣心理衛生/醫療資源。" />
+  <style>
+    :root {
+      --bg-from: #2f55ff; /* 藍 */
+      --bg-to:   #7b2cff; /* 紫 */
+      --card-bg: rgba(255,255,255,0.95);
+      --ink: #14213d;
+      --ink-soft: #334155;
+      --primary: #4f46e5;
+      --accent: #06b6d4;
+      --ok: #16a34a;
+      --warn: #d97706;
+      --err: #dc2626;
+      --radius: 16px;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg-from), var(--bg-to));
+      color: var(--ink);
+    }
+    .wrap { max-width: 1024px; margin: 0 auto; padding: 24px; }
+    .hero {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+      backdrop-filter: blur(6px);
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(22px, 2.8vw, 36px); }
+    .hero p { margin: 0; line-height: 1.75; color: var(--ink-soft); font-size: clamp(14px, 1.9vw, 18px); }
+
+    .section { margin-top: 20px; background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 8px 20px rgba(0,0,0,0.12); overflow: hidden; }
+    .section header { padding: 16px 20px; background: linear-gradient(90deg, #ffffff, #eef2ff); border-bottom: 1px solid #e5e7eb; }
+    .section header h2 { margin: 0; font-size: clamp(18px, 2.2vw, 24px); }
+    .section .body { padding: 18px 20px 22px; }
+
+    /* 兩欄網格：左欄(1)+(2) 直排，右欄(3)；手機仍維持 (2) 緊貼 (1) 之後 */
+    .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px){ .grid-two{ grid-template-columns: 1fr; } }
+
+    .col-stack { display: grid; gap: 14px; } /* 讓 (1) 與 (2) 垂直相鄰 */
+
+    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    .hint { color: var(--ink-soft); font-size: 0.95rem; }
+
+    input[type="number"], input[type="text"], textarea { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid #e5e7eb; font-size: 16px; outline: none; background: #fff; }
+    textarea { min-height: 110px; resize: vertical; }
+
+    .checkboxes { display: grid; gap: 10px; }
+    .checkboxes label { font-weight: 500; display: flex; gap: 10px; align-items: flex-start; }
+    .checkboxes input { margin-top: 3px; }
+
+    .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+    .btn { appearance: none; border: none; cursor: pointer; padding: 12px 16px; border-radius: 12px; background: var(--primary); color: #fff; font-weight: 700; letter-spacing: .3px; font-size: 15px; box-shadow: 0 6px 14px rgba(79,70,229,.35); }
+    .btn.secondary { background: #0ea5e9; box-shadow: 0 6px 14px rgba(14,165,233,.25); }
+    .btn.light { background: #ffffff; color: var(--ink); border: 1px solid #e5e7eb; box-shadow: none; }
+
+    .note { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+    .msg { margin-top: 12px; padding: 10px 12px; border-radius: 12px; display:none; }
+    .msg.ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .msg.err{ background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .links { margin-top: 12px; }
+    .links a { color: #0f766e; text-decoration: underline; word-break: break-all; }
+
+    .footer { color: #e5e7eb; text-align: center; font-size: 13px; margin: 22px 0 10px; }
+    .footer a { color: #e0e7ff; }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <section class="hero" aria-labelledby="site-title">
+      <h1 id="site-title">心聲音自我探索</h1>
+      <p>
+        感謝你使用心聲音平台，聆聽自己的情緒聲音以並評量心情溫度，在這個平台，你可以進一步仔細檢視你每一項心情溫度，並反思如何改善心理健康與生活現況、尋求自我照顧技巧。透過這個網站，你也可以覺察自己的求助需求，並掌握到目前台灣在心理衛生或醫療相關的資源網絡。
+      </p>
+    </section>
+
+    <!-- 區塊模板說明：每個 form 都有 (1)(2)(3)(4)(5)；(2) 只有當 (1)>=1 才顯示；(4) 至少勾 1 項必填 -->
+
+    <!-- 第一區塊：睡眠困難 -->
+    <section class="section" aria-labelledby="sec1-title">
+      <header><h2 id="sec1-title">第一區塊：睡眠困難</h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-sleep" data-prefix="sleep" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="sleepScore">(1) 請填入睡眠困擾程度分數（0–4）</label>
+                <input id="sleepScore" name="sleepScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required aria-describedby="sleepScoreHint" />
+                <div id="sleepScoreHint" class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/> (如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="sleep-q2" style="display:none;">
+                <label for="sleepImpact">(2) 這一週因睡眠問題導致你的困擾為何？</label>
+                <textarea id="sleepImpact" name="sleepImpact" placeholder="請描述：例如白天注意力降低、情緒波動、工作效率受影響等"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="sleepSelfImprove">(3) 自我改善之道（請反思如何改善睡眠問題）</label>
+              <textarea id="sleepSelfImprove" name="selfImprove" placeholder="例如：睡前一小時不看螢幕、固定就寢起床時間、放鬆練習…"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <label>(4) 想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="sleep-hygiene" />嘗試改善個人內外在環境之睡眠衛生（促進睡眠環境、靜心放鬆技巧）</label>
+              <label><input type="checkbox" name="tips" value="circadian-rhythm" />檢視日夜節律、建立作息規律性</label>
+              <label><input type="checkbox" name="tips" value="seek-medical" />失眠困擾暨用藥問題影響生活，可諮詢專業醫療（>3 個月建議就醫）</label>
+              <label><input type="checkbox" name="tips" value="exercise" />尋求規律身體活動或運動以增加身心平衡、促進睡眠</label>
+              <label><input type="checkbox" name="tips" value="mental-health-consult" />心理困擾專業諮詢（心理諮商、精神科、或衛生局免費服務）</label>
+            </div>
+          </div>
+
+          <div class="btns">
+            <button type="submit" class="btn" aria-label="送出表單">送出</button>
+            <button type="button" class="btn secondary btnExportCsv" aria-label="匯出 CSV">匯出 CSV</button>
+            <button type="button" class="btn light btnClear" aria-label="清除已填寫">清除</button>
+          </div>
+
+          <div class="note">※ 提交後資料會先儲存在本機瀏覽器（localStorage）。若您配置了 Google 試算表端點，資料亦會一併送出。</div>
+          <div class="msg ok" role="status" aria-live="polite">已儲存（本機/雲端）。</div>
+          <div class="msg err" role="alert" aria-live="assertive">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+
+        <div class="links" aria-labelledby="res-title-1">
+          <h3 id="res-title-1">(5) 參考資源連結</h3>
+          <ul>
+            <li>衛生福利部：夜夜好眠 → <a href="https://reurl.cc/7VZlr9" target="_blank" rel="noopener">https://reurl.cc/7VZlr9</a></li>
+            <li>食藥署：睡睡平安 FB → <a href="https://www.facebook.com/sleepverywell" target="_blank" rel="noopener">https://www.facebook.com/sleepverywell</a></li>
+            <li>食藥署諮詢服務專線：<a href="tel:+886227878200">(02)2787-8200</a></li>
+            <li>台灣睡眠醫學學會 → <a href="https://tssm.org.tw/index.php" target="_blank" rel="noopener">https://tssm.org.tw/index.php</a></li>
+            <li>國衛院論壇：失眠知多少？ → <a href="https://forum.nhri.edu.tw/r6/" target="_blank" rel="noopener">https://forum.nhri.edu.tw/r6/</a></li>
+            <li>國衛院論壇建言書：(1) <a href="https://reurl.cc/WOeWr5" target="_blank" rel="noopener">防治策略</a>；(2) <a href="https://reurl.cc/Nx5DRq" target="_blank" rel="noopener">行動綱領</a></li>
+            <li>臺大醫院健康管理：失眠怎麼辦？ → <a href="https://reurl.cc/RkKDjn" target="_blank" rel="noopener">https://reurl.cc/RkKDjn</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第二區塊：緊張不安 -->
+    <section class="section" aria-labelledby="sec2-title">
+      <header><h2 id="sec2-title">第二區塊：緊張不安</h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-anxiety" data-prefix="anxiety" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="anxietyScore">(1) 請填入緊張不安程度分數（0–4）</label>
+                <input id="anxietyScore" name="anxietyScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required />
+                <div class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/>   (如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="anxiety-q2" style="display:none;">
+                <label for="anxietyImpact">(2) 這一週因緊張不安導致你的困擾為何？</label>
+                <textarea id="anxietyImpact" name="anxietyImpact" placeholder="請描述"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="anxietySelfImprove">(3) 自我改善之道（請反思如何改善緊張不安）</label>
+              <textarea id="anxietySelfImprove" name="anxietySelfImprove" placeholder="請輸入你的想法"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label>(4)  想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="mindful-breath" />每日抽空練習至少一次正念呼吸，增加專注力及正向情緒</label>
+              <label><input type="checkbox" name="tips" value="deep-breathing-break" />面對緊張情境，深呼吸 5–10 下、暫遠離現場</label>
+              <label><input type="checkbox" name="tips" value="counseling" />欲了解來源與因應方式，可尋求心理專業諮商</label>
+              <label><input type="checkbox" name="tips" value="med-nonmed" />藥物與非藥物處置可搭配，必要時尋求醫療諮詢</label>
+              <label><input type="checkbox" name="tips" value="social-support" />尋求親友心理支持；問題仍存請尋求醫療諮詢</label>
+            </div>
+          </div>
+          <div class="btns">
+            <button type="submit" class="btn">送出</button>
+            <button type="button" class="btn secondary btnExportCsv">匯出 CSV</button>
+            <button type="button" class="btn light btnClear">清除</button>
+          </div>
+          <div class="msg ok">已儲存（本機/雲端）。</div>
+          <div class="msg err">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+        <div class="links"><h3>(5) 參考資源連結</h3><p>（可補入）</p></div>
+      </div>
+    </section>
+
+    <!-- 第三區塊：衝動易怒 -->
+    <section class="section" aria-labelledby="sec3-title">
+      <header><h2 id="sec3-title">第三區塊：衝動易怒</h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-anger" data-prefix="anger" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="angerScore">(1) 請填入衝動易怒程度分數（0–4）</label>
+                <input id="angerScore" name="angerScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required />
+                <div class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/>(如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="anger-q2" style="display:none;">
+                <label for="angerImpact">(2) 這一週因衝動易怒導致你的困擾為何？</label>
+                <textarea id="angerImpact" name="angerImpact" placeholder="請描述"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="angerSelfImprove">(3) 自我改善之道（請反思如何改善衝動易怒）</label>
+              <textarea id="angerSelfImprove" name="angerSelfImprove" placeholder="請輸入你的想法"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label>(4)  想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="mindful-breath" />每日抽空練習至少一次正念呼吸，增加專注力及正向情緒</label>
+              <label><input type="checkbox" name="tips" value="deep-breathing-break" />面對緊張情境，深呼吸 5–10 下、暫遠離現場</label>
+              <label><input type="checkbox" name="tips" value="counseling" />欲了解來源與因應方式，可尋求心理專業諮商</label>
+              <label><input type="checkbox" name="tips" value="med-nonmed" />藥物與非藥物處置可搭配，必要時尋求醫療諮詢</label>
+              <label><input type="checkbox" name="tips" value="social-support-anger" />衝動易怒時尋求親友支持；問題仍存請尋求醫療</label>
+            </div>
+          </div>
+          <div class="btns">
+            <button type="submit" class="btn">送出</button>
+            <button type="button" class="btn secondary btnExportCsv">匯出 CSV</button>
+            <button type="button" class="btn light btnClear">清除</button>
+          </div>
+          <div class="msg ok">已儲存（本機/雲端）。</div>
+          <div class="msg err">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+        <div class="links"><h3>(5) 參考資源連結</h3><p>（可補入）</p></div>
+      </div>
+    </section>
+
+    <!-- 第四區塊：心情憂鬱 -->
+    <section class="section" aria-labelledby="sec4-title">
+      <header><h2 id="sec4-title">第四區塊：心情憂鬱</h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-depress" data-prefix="depress" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="depressScore">(1) 請填入心情憂鬱程度分數（0–4）</label>
+                <input id="depressScore" name="depressScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required />
+                <div class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/>(如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="depress-q2" style="display:none;">
+                <label for="depressImpact">(2) 這一週因心情憂鬱導致你的困擾為何？</label>
+                <textarea id="depressImpact" name="depressImpact" placeholder="請描述"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="depressSelfImprove">(3) 自我改善之道（請反思如何改善心情憂鬱）</label>
+              <textarea id="depressSelfImprove" name="depressSelfImprove" placeholder="請輸入你的想法"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label>(4)  想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="mindful-breath" />每日抽空練習至少一次正念呼吸，增加專注力及正向情緒</label>
+              <label><input type="checkbox" name="tips" value="deep-breathing-break" />面對緊張情境，深呼吸 5–10 下、暫遠離現場</label>
+              <label><input type="checkbox" name="tips" value="counseling" />欲了解來源與因應方式，可尋求心理專業諮商</label>
+              <label><input type="checkbox" name="tips" value="med-nonmed" />藥物與非藥物處置可搭配，必要時尋求醫療諮詢</label>
+              <label><input type="checkbox" name="tips" value="social-support-depress" />心情憂鬱時尋求親友支持；問題仍存請尋求醫療</label>
+            </div>
+          </div>
+          <div class="btns">
+            <button type="submit" class="btn">送出</button>
+            <button type="button" class="btn secondary btnExportCsv">匯出 CSV</button>
+            <button type="button" class="btn light btnClear">清除</button>
+          </div>
+          <div class="msg ok">已儲存（本機/雲端）。</div>
+          <div class="msg err">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+        <div class="links"><h3>(5) 參考資源連結</h3><p>（可補入）</p></div>
+      </div>
+    </section>
+
+    <!-- 第五區塊：自卑感受 -->
+    <section class="section" aria-labelledby="sec5-title">
+      <header><h2 id="sec5-title">第五區塊：自卑感受</h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-inferior" data-prefix="inferior" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="inferiorScore">(1) 請填入自卑感受程度分數（0–4）</label>
+                <input id="inferiorScore" name="inferiorScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required />
+                <div class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/>(如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="inferior-q2" style="display:none;">
+                <label for="inferiorImpact">(2) 這一週因自卑感受導致你的困擾為何？</label>
+                <textarea id="inferiorImpact" name="inferiorImpact" placeholder="請描述"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="inferiorSelfImprove">(3) 自我改善之道（請反思如何改善自卑感受）</label>
+              <textarea id="inferiorSelfImprove" name="inferiorSelfImprove" placeholder="請輸入你的想法"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label>(4)  想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="mindful-breath" />每日抽空練習至少一次正念呼吸，增加專注力及正向情緒</label>
+              <label><input type="checkbox" name="tips" value="deep-breathing-break" />面對緊張情境，深呼吸 5–10 下、暫遠離現場</label>
+              <label><input type="checkbox" name="tips" value="counseling" />欲了解來源與因應方式，可尋求心理專業諮商</label>
+              <label><input type="checkbox" name="tips" value="med-nonmed" />藥物與非藥物處置可搭配，必要時尋求醫療諮詢</label>
+              <label><input type="checkbox" name="tips" value="social-support-inferior" />自卑感受時尋求親友支持；問題仍存請尋求醫療</label>
+            </div>
+          </div>
+          <div class="btns">
+            <button type="submit" class="btn">送出</button>
+            <button type="button" class="btn secondary btnExportCsv">匯出 CSV</button>
+            <button type="button" class="btn light btnClear">清除</button>
+          </div>
+          <div class="msg ok">已儲存（本機/雲端）。</div>
+          <div class="msg err">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+        <div class="links"><h3>(5) 參考資源連結</h3><p>（可補入）</p></div>
+      </div>
+    </section>
+
+    <!-- 第六區塊：自殺意念（安全提醒） -->
+    <section class="section" aria-labelledby="sec6-title">
+      <header><h2 id="sec6-title">第六區塊：自殺意念 </h2></header>
+      <div class="body">
+        <form class="hv-form" id="form-suicide" data-prefix="suicide" novalidate>
+          <div class="grid-two">
+            <div class="col-stack">
+              <div>
+                <label for="suicideScore">(1) 請填入自殺意念程度分數（0–4）</label>
+                <input id="suicideScore" name="suicideScore" type="number" inputmode="numeric" min="0" max="4" placeholder="0～4" required />
+                <div class="hint">（0：無情緒困擾；1：輕度；2：中度；3：厲害；4：非常厲害）<br/>(如 ≥1，請繼續填寫第 2 題。)</div>
+              </div>
+              <div id="suicide-q2" style="display:none;">
+                <label for="suicideImpact">(2) 這一週因自殺意念導致你的困擾為何？</label>
+                <textarea id="suicideImpact" name="suicideImpact" placeholder="請描述"></textarea>
+              </div>
+            </div>
+            <div>
+              <label for="suicideSelfImprove">(3) 自我改善之道（請反思如何改善自殺意念）</label>
+              <textarea id="suicideSelfImprove" name="suicideSelfImprove" placeholder="請輸入你的想法"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label>(4)  想不到如何改善嗎？以下提供一些武功祕笈（請複選與必填）</label>
+            <div class="checkboxes" data-required="true">
+              <label><input type="checkbox" name="tips" value="mindful-breath" />每日抽空練習至少一次正念呼吸，增加專注力及正向情緒</label>
+              <label><input type="checkbox" name="tips" value="deep-breathing-break" />面對緊張情境，深呼吸 5–10 下、暫遠離現場</label>
+              <label><input type="checkbox" name="tips" value="counseling" />欲了解來源與因應方式，可尋求心理專業諮商</label>
+              <label><input type="checkbox" name="tips" value="med-nonmed" />藥物與非藥物處置可搭配，必要時尋求醫療諮詢</label>
+              <label><input type="checkbox" name="tips" value="social-support-suicide" />自殺意念時尋求親友支持；問題仍存請尋求醫療</label>
+            </div>
+          </div>
+          <div class="btns">
+            <button type="submit" class="btn">送出</button>
+            <button type="button" class="btn secondary btnExportCsv">匯出 CSV</button>
+            <button type="button" class="btn light btnClear">清除</button>
+          </div>
+          <div class="msg ok">已儲存（本機/雲端）。</div>
+          <div class="msg err">送出失敗，請稍後再試或匯出 CSV。</div>
+        </form>
+        <div class="links"><h3>(5) 參考資源連結</h3><p>（可補入）</p></div>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 心聲音自我探索 — 若需蒐集個資，請務必加入告知與同意機制，並遵循台灣個資保護法規。<br/>
+      <!--
+      ● Google 試算表串接（Apps Script 快速範例）：
+      1) 在 Google Drive 建「Google 試算表」，命名如 HeartVoice。
+      2) extensions → Apps Script 新增專案，貼上：
+      function doPost(e){
+        const ss = SpreadsheetApp.openById('<<YOUR_SHEET_ID>>');
+        const sheet = ss.getSheetByName('工作表1') || ss.insertSheet('工作表1');
+        const data = JSON.parse(e.postData.contents);
+        const keys = Object.keys(data);
+        if(sheet.getLastRow()===0){ sheet.appendRow([...keys]); }
+        sheet.appendRow(keys.map(k=> typeof data[k]==='object' ? JSON.stringify(data[k]) : data[k] ));
+        return ContentService.createTextOutput(JSON.stringify({ok:true}))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+      3) Deploy → New deployment → Web app → Who has access: Anyone。
+      4) 取得 Web App URL，貼到下方 FORM_ENDPOINT 即可。
+      -->
+    </p>
+  </main>
+
+  <script>
+    // ======= 於此填入 Google Apps Script Web App URL（或其他收集端點）=======
+    const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwZtCZcKge6KoYOCkthzrnhDgqQ8J50WcKKgFAMIeP06Wha8Dke6ETaaJtrjptPqozK/exec"; // 例如：https://script.google.com/macros/s/AKfycbXXXXXXXX/exec
+
+    // 取得所有表單
+    const forms = Array.from(document.querySelectorAll('.hv-form'));
+
+    // 監聽每個表單中的分數，決定是否顯示第 2 題
+    forms.forEach(f => {
+      const prefix = f.dataset.prefix;
+      const score = f.querySelector(`#${prefix}Score`);
+      const q2wrap = f.querySelector(`#${prefix}-q2`);
+      const msgOk = f.querySelector('.msg.ok');
+      const msgErr = f.querySelector('.msg.err');
+      const checksWrap = f.querySelector('.checkboxes');
+
+      function toggleQ2(){
+        const v = Number(score.value);
+        q2wrap.style.display = (Number.isFinite(v) && v >= 1) ? 'block' : 'none';
+      }
+      score.addEventListener('input', toggleQ2);
+      toggleQ2();
+
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // 檢查分數 0-4
+        const v = Number(score.value);
+        const validScore = Number.isFinite(v) && v >= 0 && v <= 4;
+        if(!validScore){ score.focus(); show(msgErr); return; }
+        // 檢查複選至少 1 項
+        const checkedTips = Array.from(f.querySelectorAll('input[name="tips"]:checked'));
+        if(checksWrap?.dataset.required === 'true' && checkedTips.length === 0){
+          alert('請至少勾選一項（第4題）');
+          checksWrap.scrollIntoView({behavior:'smooth', block:'center'});
+          return;
+        }
+        // 組合 payload（通用欄位名稱）
+        const payload = collectPayload(f, prefix);
+        saveLocal(prefix, payload);
+        const r = await postRemote(payload);
+        if(r.ok || r.skipped){ show(msgOk); f.reset(); toggleQ2(); }
+        else{ show(msgErr); }
+      });
+
+      // 匯出 CSV
+      const btnCsv = f.querySelector('.btnExportCsv');
+      btnCsv.addEventListener('click', () => exportCsv(prefix));
+
+      // 清除
+      const btnClear = f.querySelector('.btnClear');
+      btnClear.addEventListener('click', () => { f.reset(); toggleQ2(); });
+    });
+
+    function show(el){ el.style.display='block'; setTimeout(()=>el.style.display='none', 3600); }
+
+    function collectPayload(f, prefix){
+      const checks = Array.from(f.querySelectorAll('input[name="tips"]:checked')).map(x => x.value);
+      const get = id => (f.querySelector(`#${id}`)?.value || '').trim();
+      return {
+        section: prefix,
+        score: get(`${prefix}Score`) ? Number(get(`${prefix}Score`)) : null,
+        impact: get(`${prefix}Impact`) || null,
+        selfImprove: get(`${prefix}SelfImprove`) || null,
+        tips: checks,
+        at: new Date().toISOString(),
+        ua: navigator.userAgent
+      };
+    }
+
+    function saveLocal(prefix, payload){
+      const key = `heart-voice:${prefix}`;
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      list.push(payload); localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    async function postRemote(payload){
+      if(!FORM_ENDPOINT) return { ok:false, skipped: true };
+      try{
+        const res = await fetch(FORM_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        return { ok: res.ok };
+      }catch(err){ console.error(err); return { ok:false } }
+    }
+
+    function exportCsv(prefix){
+      const key = `heart-voice:${prefix}`;
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      if(!list.length){ alert('目前沒有可匯出的資料'); return; }
+      const cols = ['at','section','score','impact','selfImprove','tips','ua'];
+      const head = cols.join(',');
+      const rows = list.map(o => [ o.at, o.section, o.score ?? '', JSON.stringify(o.impact ?? ''), JSON.stringify(o.selfImprove ?? ''), JSON.stringify(o.tips ?? []), JSON.stringify(o.ua ?? '') ].join(','));
+      const csv = [head, ...rows].join('
+');
+      const blob = new Blob(["﻿" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${prefix}-data-${Date.now()}.csv`; a.click(); URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
